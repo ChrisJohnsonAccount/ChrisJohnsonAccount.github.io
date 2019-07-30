@@ -3,25 +3,52 @@
 <meta charset="utf-8">
 <script src="https://d3js.org/d3.v4.js"></script>
 <style>
+    body{
+        background-color: whitesmoke;
+    }
     h1 {
-        text-align: center; padding: 3px 3px; width: 1100px; background-color:black; border-style: solid;   border-width: 5px;   border-radius: 15px; border-color: black;
+        text-align: center; padding: 3px 3px; width: 1100px; background-color:black; border-style: solid;   border-width: 5px;   border-color: black;
         color: whitesmoke; font-family: Arial, Helvetica, sans-serif; font-style: italic; font-size: 24px;
     }
-    h2 {
-        text-align: center; padding: 0px 0px; width: 1100px; background-color: white; 
-        color: black; font-family: Arial, Helvetica, sans-serif; font-style: italic; font-size: 18px
+
+    p {
+       height: 14 px; background-color: whitesmoke; 
+        color: black; font-family: Arial, Helvetica, sans-serif; font-size: 14px
     }
+    
+    [id="Annotation1"] {
+       margin-left: 100px; text-align: left; height: 14px; width: 900px; background-color: whitesmoke; 
+        color: black; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 14px
+    }
+
+
+    [id="Annotation2"] {
+       margin-left: 200px; text-align: left; height: 14px; width: 900px; background-color: whitesmoke; 
+        color: black; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 14px
+    }
+    [id="Annotation3"] {
+       margin-left: 300px; text-align: left; height: 14px; width: 800px; background-color: whitesmoke; 
+        color: black; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 14px
+    }
+
+    [id="Annotation4"] {
+        margin-left: 400px; text-align: left; height: 14px; width: 700px; background-color: whitesmoke; 
+        color: green; font-family: Arial, Helvetica, sans-serif;  font-weight: bold; text-decoration: underline; font-size: 14px;
+    }
+
+
     svg {
-      background-color: white; border-style: solid;   border-width: 3px; border-color: black;
+      background-color: whitesmoke; 
     }
 
     button {
     display: inline-table;
-    height: 45px;
+    height: 35px;
     width: 275px;
     font-size: 14px;
     cursor: pointer;
     text-align: center;
+    font-weight: bold;
     text-decoration: none;
     outline: none;
     color: whitesmoke;
@@ -44,39 +71,36 @@
 		.axis text {
 			font-family: Arial, Helvetica, sans-serif;
 			font-size: 15px;
+            font-weight: bold;
             overflow-wrap:break-word;
 		}
-
 */
     </style>
 
 <body>
-    <h1>Which Sectors in the US Economy are the Most Valuable?</h1>
-    <h2>Analysis of the Fortune 1000</h2>
+    <h1>Which Sector of the Fortune 1000 is the Most Valuable?</h1>
 
     <!-- Buttons to drive variable shown in each section -->
-    <button type="button" class="buttonStyle" onclick="update('TotalEEsMillion')">Step 1- Total Employees</button>
-    <button type="button" class="buttonStyle" onclick="update('RevenueTrillion')">Step 2- Total Revenue ($T)</button>
-    <button type="button" class="buttonStyle" onclick="update('RevPerEEMillion')">Step 3- Sales($M) / Employee</button>
-    <button type="button" class="buttonStyle" onclick="update('MktCapTrillion')">Step 4- Market Cap ($T)</button>
+    <button type="button" class="buttonStyle" onclick="update('TotalEEsMillion')">View 1. Total Employees (Million)</button>
+    <button type="button" class="buttonStyle" onclick="update2('RevenueTrillion')">View 2. Total Revenue ($Trillion)</button>
+    <button type="button" class="buttonStyle" onclick="update3('RevPerEEMillion')">View 3. Sales/ Employee ($Million)
+    </button>
+    <button type="button" class="buttonStyle" onclick="update4('MktCapTrillion')">View 4. Market Cap ($Trillion)</button>
 
-    <p id="Annotation"></p>
+    <p id="Annotation1"></p>
+    <p id="Annotation2"></p>
+    <p id="Annotation3"></p>
+    <p id="Annotation4"></p>
 
     <svg></svg>
 
     <script>
-        // To Do
-        // 1) Create annotation functionality depeneding on the scene
-        // 2) Add tooltip functionality
-        // 3) Change colors
-        // 4) Add titles
-
 
         //Using a wide SVG canvas to account for # of Sectors 
 
-        var margin = { top: 30, right: 30, bottom: 140, left: 60 },
+        var margin = { top: 40, right: 60, bottom: 120, left: 60 },
             width = 1100 - margin.left - margin.right,
-            height = 350 - margin.top - margin.bottom;
+            height = 320 - margin.top - margin.bottom;
 
         var svg = d3.select("svg")
             .attr("width", width + margin.left + margin.right)
@@ -119,6 +143,81 @@
                 y.domain([0, d3.max(data, function (d) { return +d[selectedVar] })]);
                 yAxis.transition().duration(500).call(d3.axisLeft(y));
 
+
+
+                // Variable u used to updated new data to bars
+                var u = svg.selectAll("rect")
+                    .data(data)
+
+                // Update columns
+                u
+                    .enter()
+                    .append("rect")
+                    .merge(u)
+                    .on("mouseover", function (d) {
+                        //Get this bar's x/y values, then augment for the tooltip
+                        var xPosition = parseFloat(d3.select(this).attr("x")) + x.bandwidth() / 2;
+                        var yPosition = parseFloat(d3.select(this).attr("y")) -20;
+                        //Create the tooltip label
+                        svg.append("text")
+                            .attr("id", "tooltip")
+                            .attr("x", xPosition)
+                            .attr("y", yPosition)
+                            .attr("text-anchor", "middle")
+                            .attr("font-family", "sans-serif")
+                            .attr("font-size", "16px")
+                            .attr("font-weight", "bold")
+                            .attr("stroke", "green")
+                            .attr("fill", "green")
+                            .text(+d.TotalEEsMillion+"M people,"+d.CompanyCount+" firms");
+                    })
+                    .on("mouseout", function () {
+                        //Remove the tooltip
+                        d3.select("#tooltip").remove();
+                    })
+                    .transition()
+                    .duration(500)
+                    .attr("x", function (d) { return x(d.Sector); })
+                    .attr("y", function (d) { return y(d[selectedVar]); })
+                    .attr("width", x.bandwidth())
+                    .attr("height", function (d) { return height - y(d[selectedVar]); })
+                    .attr("fill", "silver")
+                    .attr("stroke", "black")
+
+
+
+            })
+
+
+            document.getElementById("Annotation1").innerHTML = "Retail has 2x more employees than other sector.";
+            document.getElementById("Annotation2").innerHTML = "";
+            document.getElementById("Annotation3").innerHTML = "";
+            document.getElementById("Annotation4").innerHTML = "";
+
+        }
+
+        // Variable used at start
+        update('TotalEEsMillion')
+
+
+        // Function 'update' create & updates chart for new variables
+        function update2(selectedVar) {
+            // Parse the Data
+            d3.csv("https://raw.githubusercontent.com/ChrisJohnsonAccount/CS498FinalProject/master/Fortune1000DataFinal.csv", function (data) {
+
+                // Set X axis, adjust modify axis labels so all Sector names fit
+                x.domain(data.map(function (d) { return d.Sector; }))
+                xAxis.transition().duration(500).call(d3.axisBottom(x))
+
+                svg.selectAll(".xaxis text")  // select all the text elements for the xaxis
+                    .attr("transform", function (d) {
+                        return "translate(-65,50)rotate(-40)";
+                    });
+
+                // Y axis
+                y.domain([0, d3.max(data, function (d) { return +d[selectedVar] })]);
+                yAxis.transition().duration(500).call(d3.axisLeft(y));
+
                 // Variable u used to updated new data to bars
                 var u = svg.selectAll("rect")
                     .data(data)
@@ -129,22 +228,172 @@
                     .enter()
                     .append("rect")
                     .merge(u)
+                    .on("mouseover", function (d) {
+                        //Get this bar's x/y values, then augment for the tooltip
+                        var xPosition = parseFloat(d3.select(this).attr("x")) + x.bandwidth() / 2;
+                        var yPosition = parseFloat(d3.select(this).attr("y")) -20;
+                        //Create the tooltip label
+                        svg.append("text")
+                            .attr("id", "tooltip")
+                            .attr("x", xPosition)
+                            .attr("y", yPosition)
+                            .attr("text-anchor", "middle")
+                            .attr("font-family", "sans-serif")
+                            .attr("font-size", "16px")
+                            .attr("font-weight", "bold")
+                            .attr("stroke", "green")
+                            .attr("fill", "green")
+                            .text("$"+d.RevenueTrillion+" trillion rev., "+d.CompanyCount+" firms");
+                    })
+                    .on("mouseout", function () {
+                        //Remove the tooltip
+                        d3.select("#tooltip").remove();
+                    })
                     .transition()
                     .duration(500)
                     .attr("x", function (d) { return x(d.Sector); })
                     .attr("y", function (d) { return y(d[selectedVar]); })
                     .attr("width", x.bandwidth())
                     .attr("height", function (d) { return height - y(d[selectedVar]); })
-                    .attr("fill", "grey")
+                    .attr("fill", "lightgrey")
                     .attr("stroke", "black")
+    
 
             })
-
+            document.getElementById("Annotation2").innerHTML = "Financials generate the most revenue.";
+            document.getElementById("Annotation3").innerHTML = "";
+            document.getElementById("Annotation4").innerHTML = "";
 
         }
 
-        // Variable used at start
-        update('TotalEEsMillion')
+        // Function 'update' create & updates chart for new variables
+        function update3(selectedVar) {
+            // Parse the Data
+            d3.csv("https://raw.githubusercontent.com/ChrisJohnsonAccount/CS498FinalProject/master/Fortune1000DataFinal.csv", function (data) {
+
+                // Set X axis, adjust modify axis labels so all Sector names fit
+                x.domain(data.map(function (d) { return d.Sector; }))
+                xAxis.transition().duration(500).call(d3.axisBottom(x))
+
+                svg.selectAll(".xaxis text")  // select all the text elements for the xaxis
+                    .attr("transform", function (d) {
+                        return "translate(-65,50)rotate(-40)";
+                    });
+
+                // Y axis
+                y.domain([0, d3.max(data, function (d) { return +d[selectedVar] })]);
+                yAxis.transition().duration(500).call(d3.axisLeft(y));
+
+                // Variable u used to updated new data to bars
+                var u = svg.selectAll("rect")
+                    .data(data)
+
+
+                // Update columns
+                u
+                    .enter()
+                    .append("rect")
+                    .merge(u)
+                    .on("mouseover", function (d) {
+                        //Get this bar's x/y values, then augment for the tooltip
+                        var xPosition = parseFloat(d3.select(this).attr("x")) + x.bandwidth() / 2;
+                        var yPosition = parseFloat(d3.select(this).attr("y")) -20;
+                        //Create the tooltip label
+                        svg.append("text")
+                            .attr("id", "tooltip")
+                            .attr("x", xPosition)
+                            .attr("y", yPosition)
+                            .attr("text-anchor", "middle")
+                            .attr("font-family", "sans-serif")
+                            .attr("font-size", "16px")
+                            .attr("font-weight", "bold")
+                            .attr("stroke", "green")
+                            .attr("fill", "green")
+                            .text("$"+d.RevPerEEMillion+"M per person,"+d.CompanyCount+" firms");
+                    })
+                    .on("mouseout", function () {
+                        //Remove the tooltip
+                        d3.select("#tooltip").remove();
+                    })
+                    .transition()
+                    .duration(500)
+                    .attr("x", function (d) { return x(d.Sector); })
+                    .attr("y", function (d) { return y(d[selectedVar]); })
+                    .attr("width", x.bandwidth())
+                    .attr("height", function (d) { return height - y(d[selectedVar]); })
+                    .attr("fill", "lightgrey")
+                    .attr("stroke", "black")
+             
+
+            })
+
+            document.getElementById("Annotation3").innerHTML = "The Energy sector has incredibly high sales per employee.";
+            document.getElementById("Annotation4").innerHTML = "";
+        }
+
+        // Function 'update' create & updates chart for new variables
+        function update4(selectedVar) {
+            // Parse the Data
+            d3.csv("https://raw.githubusercontent.com/ChrisJohnsonAccount/CS498FinalProject/master/Fortune1000DataFinal.csv", function (data) {
+
+                // Set X axis, adjust modify axis labels so all Sector names fit
+                x.domain(data.map(function (d) { return d.Sector; }))
+                xAxis.transition().duration(500).call(d3.axisBottom(x))
+
+                svg.selectAll(".xaxis text")  // select all the text elements for the xaxis
+                    .attr("transform", function (d) {
+                        return "translate(-65,50)rotate(-40)";
+                    });
+
+                // Y axis
+                y.domain([0, d3.max(data, function (d) { return +d[selectedVar] })]);
+                yAxis.transition().duration(500).call(d3.axisLeft(y));
+
+                // Variable u used to updated new data to bars
+                var u = svg.selectAll("rect")
+                    .data(data)
+
+
+                // Update columns
+                u
+                    .enter()
+                    .append("rect")
+                    .merge(u)
+                    .on("mouseover", function (d) {
+                        //Get this bar's x/y values, then augment for the tooltip
+                        var xPosition = parseFloat(d3.select(this).attr("x")) + x.bandwidth() / 2;
+                        var yPosition = parseFloat(d3.select(this).attr("y")) -20;
+                        //Create the tooltip label
+                        svg.append("text")
+                            .attr("id", "tooltip")
+                            .attr("x", xPosition)
+                            .attr("y", yPosition)
+                            .attr("text-anchor", "middle")
+                            .attr("font-family", "sans-serif")
+                            .attr("font-size", "16px")
+                            .attr("font-weight", "bold")
+                            .attr("stroke", "green")
+                            .attr("fill", "green")
+                            .text("$"+d.MktCapTrillion+" trillion mkt cap,"+d.CompanyCount+" firms");
+                    })
+                    .on("mouseout", function () {
+                        //Remove the tooltip
+                        d3.select("#tooltip").remove();
+                    })
+                    .transition()
+                    .duration(500)
+                    .attr("x", function (d) { return x(d.Sector); })
+                    .attr("y", function (d) { return y(d[selectedVar]); })
+                    .attr("width", x.bandwidth())
+                    .attr("height", function (d) { return height - y(d[selectedVar]); })
+                    .attr("fill", "lightgrey")
+                    .attr("stroke", "black")
+ 
+
+            })
+
+            document.getElementById("Annotation4").innerHTML = "However, Tech wins out- its market cap is valued at over $5 trillion USD.";
+        }
 
     </script>
 
