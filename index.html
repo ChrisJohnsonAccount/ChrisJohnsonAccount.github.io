@@ -1,104 +1,153 @@
 <!DOCTYPE html>
+<html>
 <meta charset="utf-8">
-
-<!-- Load d3.js -->
 <script src="https://d3js.org/d3.v4.js"></script>
 <style>
     h1 {
-        text-align: center; height: 70px; width: 800px; background-color:black; border-style: solid;   border-width: 5px; border-color: black;
-        color: lightgrey; font-family: Arial, Helvetica, sans-serif; font-style: italic;
+        text-align: center; padding: 3px 3px; width: 1100px; background-color:black; border-style: solid;   border-width: 5px;   border-radius: 15px; border-color: black;
+        color: whitesmoke; font-family: Arial, Helvetica, sans-serif; font-style: italic; font-size: 24px;
     }
     h2 {
-        text-align: center; height: 10px; width: 800px; background-color: white; 
-        color: black; font-family: Arial, Helvetica, sans-serif; font-style: italic;
+        text-align: center; padding: 0px 0px; width: 1100px; background-color: white; 
+        color: black; font-family: Arial, Helvetica, sans-serif; font-style: italic; font-size: 18px
     }
     svg {
       background-color: white; border-style: solid;   border-width: 3px; border-color: black;
     }
-    button{
-        display: inline-block; height: 18px; width: 800px; 
+
+    button {
+    display: inline-table;
+    height: 45px;
+    width: 275px;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: whitesmoke;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 7px #999;
     }
+
+    button.buttonStyle:hover {background-color: #3e8e41}
+
+    button.buttonStyle:active {
+    background-color: #3e8e41;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+
+    }
+    
+	
+		.axis text {
+			font-family: Arial, Helvetica, sans-serif;
+			font-size: 15px;
+            overflow-wrap:break-word;
+		}
+
+*/
     </style>
 
-<h1>Which Sector in the US Contains the Most Valuable Companies?</h1>
-<h2>Analysis of the Fortune 1000</h2>
+<body>
+    <h1>Which Sectors in the US Economy are the Most Valuable?</h1>
+    <h2>Analysis of the Fortune 1000</h2>
 
-<!-- Add 2 buttons -->
-<button type="button" onclick="update('TotalEEsMillion')">Total Employees</button>
-<button type="button" onclick="update('RevPerEEMillion')">Revenue Per Employee ($M)</button>
-<button type="button" onclick="update('MktCapTrillion')">Market Cap ($T)</button>
-<button type="button" onclick="update('RevenueTrillion')">Revenue ($T)</button>
-<button type="button" onclick="update('CompanyCount')"># of Companies</button>
+    <!-- Buttons to drive variable shown in each section -->
+    <button type="button" class="buttonStyle" onclick="update('TotalEEsMillion')">Step 1- Total Employees</button>
+    <button type="button" class="buttonStyle" onclick="update('RevenueTrillion')">Step 2- Total Revenue ($T)</button>
+    <button type="button" class="buttonStyle" onclick="update('RevPerEEMillion')">Step 3- Sales($M) / Employee</button>
+    <button type="button" class="buttonStyle" onclick="update('MktCapTrillion')">Step 4- Market Cap ($T)</button>
 
-<!-- Create a div where the graph will take place -->
-<svg></svg>
+    <p id="Annotation"></p>
 
-<script>
+    <svg></svg>
 
-    // set the dimensions and margins of the graph
-    var margin = { top: 30, right: 30, bottom: 40, left: 60 },
-        width = 800 - margin.left - margin.right,
-        height = 300 - margin.top - margin.bottom;
-
-    // append the svg object to the body of the page
-    var svg = d3.select("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform",
-            "translate(" + margin.left + "," + margin.top + ")");
-
-    // Initialize the X axis
-    var x = d3.scaleBand()
-        .range([0, width])
-        .padding(0.2);
-    var xAxis = svg.append("g")
-        .attr("transform", "translate(0," + height + ")")
-
-    // Initialize the Y axis
-    var y = d3.scaleLinear()
-        .range([height, 0]);
-    var yAxis = svg.append("g")
-        .attr("class", "myYaxis")
+    <script>
+        // To Do
+        // 1) Create annotation functionality depeneding on the scene
+        // 2) Add tooltip functionality
+        // 3) Change colors
+        // 4) Add titles
 
 
-    // A function that create / update the plot for a given variable:
-    function update(selectedVar) {
+        //Using a wide SVG canvas to account for # of Sectors 
 
-        // Parse the Data
-        d3.csv("https://raw.githubusercontent.com/ChrisJohnsonAccount/ChrisJohnsonAccount.github.io/master/f1000DataFinal.csv", function (data) {
+        var margin = { top: 30, right: 30, bottom: 140, left: 60 },
+            width = 1100 - margin.left - margin.right,
+            height = 350 - margin.top - margin.bottom;
 
-            // X axis
-            x.domain(data.map(function (d) { return d.Sector; }))
-            xAxis.transition().duration(500).call(d3.axisBottom(x))
+        var svg = d3.select("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
 
-            // Add Y axis
-            y.domain([0, d3.max(data, function (d) { return +d[selectedVar] })]);
-            yAxis.transition().duration(500).call(d3.axisLeft(y));
-
-            // variable u: map data to existing bars
-            var u = svg.selectAll("rect")
-                .data(data)
-
-            // update bars
-            u
-                .enter()
-                .append("rect")
-                .merge(u)
-                .transition()
-                .duration(500)
-                .attr("x", function (d) { return x(d.Sector); })
-                .attr("y", function (d) { return y(d[selectedVar]); })
-                .attr("width", x.bandwidth())
-                .attr("height", function (d) { return height - y(d[selectedVar]); })
-                .attr("fill", "grey")
+        // Create X axis
+        var x = d3.scaleBand()
+            .range([0, width])
+            .padding(0.1);
+        var xAxis = svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .attr("class", "xaxis axis")
 
 
-        })
+        // Create Y axis
+        var y = d3.scaleLinear()
+            .range([height, 0]);
+        var yAxis = svg.append("g")
+            .attr("class", "yaxis axis")
 
-    }
 
-    // Initialize plot
-    update('TotalEEsMillion')
+        // Function 'update' create & updates chart for new variables
+        function update(selectedVar) {
+            // Parse the Data
+            d3.csv("https://raw.githubusercontent.com/ChrisJohnsonAccount/CS498FinalProject/master/Fortune1000DataFinal.csv", function (data) {
 
-</script>
+                // Set X axis, adjust modify axis labels so all Sector names fit
+                x.domain(data.map(function (d) { return d.Sector; }))
+                xAxis.transition().duration(500).call(d3.axisBottom(x))
+
+                svg.selectAll(".xaxis text")  // select all the text elements for the xaxis
+                    .attr("transform", function (d) {
+                        return "translate(-65,50)rotate(-40)";
+                    });
+
+                // Y axis
+                y.domain([0, d3.max(data, function (d) { return +d[selectedVar] })]);
+                yAxis.transition().duration(500).call(d3.axisLeft(y));
+
+                // Variable u used to updated new data to bars
+                var u = svg.selectAll("rect")
+                    .data(data)
+
+
+                // Update columns
+                u
+                    .enter()
+                    .append("rect")
+                    .merge(u)
+                    .transition()
+                    .duration(500)
+                    .attr("x", function (d) { return x(d.Sector); })
+                    .attr("y", function (d) { return y(d[selectedVar]); })
+                    .attr("width", x.bandwidth())
+                    .attr("height", function (d) { return height - y(d[selectedVar]); })
+                    .attr("fill", "grey")
+                    .attr("stroke", "black")
+
+            })
+
+
+        }
+
+        // Variable used at start
+        update('TotalEEsMillion')
+
+    </script>
+
+</body>
+
+</html>
