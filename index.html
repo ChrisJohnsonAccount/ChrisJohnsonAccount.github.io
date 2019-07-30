@@ -4,7 +4,7 @@
 <script src="https://d3js.org/d3.v4.js"></script>
 <style>
     body{
-        background-color: whitesmoke;
+        background-color: black;
     }
     h1 {
         text-align: center; padding: 3px 3px; width: 1100px; background-color:black; border-style: solid;   border-width: 5px;   border-color: black;
@@ -12,33 +12,33 @@
     }
 
     p {
-       height: 14 px; background-color: whitesmoke; 
-        color: black; font-family: Arial, Helvetica, sans-serif; font-size: 14px
+       height: 14 px; background-color: black; 
+        color:whitesmoke; font-family: Arial, Helvetica, sans-serif; font-size: 14px
     }
     
     [id="Annotation1"] {
-       margin-left: 100px; text-align: left; height: 14px; width: 900px; background-color: whitesmoke; 
-        color: black; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 14px
+       text-align: center; height: 14px; width: 1100px; background-color: black; 
+        color:red; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 14px
     }
 
 
     [id="Annotation2"] {
-       margin-left: 200px; text-align: left; height: 14px; width: 900px; background-color: whitesmoke; 
-        color: black; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 14px
+      text-align: center; height: 14px; width: 1100px; background-color: black; 
+        color:red; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 14px
     }
     [id="Annotation3"] {
-       margin-left: 300px; text-align: left; height: 14px; width: 800px; background-color: whitesmoke; 
-        color: black; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 14px
+       text-align: center; height: 14px; width: 1100px; background-color:black; 
+        color:red; font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 14px
     }
 
     [id="Annotation4"] {
-        margin-left: 400px; text-align: left; height: 14px; width: 700px; background-color: whitesmoke; 
+        text-align: center; height: 14px; width: 1100px; background-color: black; 
         color: green; font-family: Arial, Helvetica, sans-serif;  font-weight: bold; text-decoration: underline; font-size: 14px;
     }
 
 
     svg {
-      background-color: whitesmoke; 
+      background-color: black; 
     }
 
     button {
@@ -67,13 +67,19 @@
 
     }
     
+    
 	
 		.axis text {
-			font-family: Arial, Helvetica, sans-serif;
+			fill: darkgray;
+            font-family: Arial, Helvetica, sans-serif;
 			font-size: 15px;
-            font-weight: bold;
+   
             overflow-wrap:break-word;
 		}
+
+    .axis line{
+        stroke: darkgrey;
+    }
 */
     </style>
 
@@ -165,8 +171,7 @@
                             .attr("y", yPosition)
                             .attr("text-anchor", "middle")
                             .attr("font-family", "sans-serif")
-                            .attr("font-size", "16px")
-                            .attr("font-weight", "bold")
+                            .attr("font-size", "14px")
                             .attr("stroke", "green")
                             .attr("fill", "green")
                             .text(+d.TotalEEsMillion+"M people,"+d.CompanyCount+" firms");
@@ -181,7 +186,7 @@
                     .attr("y", function (d) { return y(d[selectedVar]); })
                     .attr("width", x.bandwidth())
                     .attr("height", function (d) { return height - y(d[selectedVar]); })
-                    .attr("fill", "silver")
+                    .attr("fill", "white")
                     .attr("stroke", "black")
 
 
@@ -239,8 +244,8 @@
                             .attr("y", yPosition)
                             .attr("text-anchor", "middle")
                             .attr("font-family", "sans-serif")
-                            .attr("font-size", "16px")
-                            .attr("font-weight", "bold")
+                            .attr("font-size", "14px")
+    
                             .attr("stroke", "green")
                             .attr("fill", "green")
                             .text("$"+d.RevenueTrillion+" trillion rev., "+d.CompanyCount+" firms");
@@ -255,7 +260,7 @@
                     .attr("y", function (d) { return y(d[selectedVar]); })
                     .attr("width", x.bandwidth())
                     .attr("height", function (d) { return height - y(d[selectedVar]); })
-                    .attr("fill", "lightgrey")
+                    .attr("fill", "white")
                     .attr("stroke", "black")
     
 
@@ -305,8 +310,8 @@
                             .attr("y", yPosition)
                             .attr("text-anchor", "middle")
                             .attr("font-family", "sans-serif")
-                            .attr("font-size", "16px")
-                            .attr("font-weight", "bold")
+                            .attr("font-size", "14px")
+      
                             .attr("stroke", "green")
                             .attr("fill", "green")
                             .text("$"+d.RevPerEEMillion+"M per person,"+d.CompanyCount+" firms");
@@ -321,13 +326,13 @@
                     .attr("y", function (d) { return y(d[selectedVar]); })
                     .attr("width", x.bandwidth())
                     .attr("height", function (d) { return height - y(d[selectedVar]); })
-                    .attr("fill", "lightgrey")
+                    .attr("fill", "white")
                     .attr("stroke", "black")
              
 
             })
 
-            document.getElementById("Annotation3").innerHTML = "The Energy sector has incredibly high sales per employee.";
+            document.getElementById("Annotation3").innerHTML = "Energy leads in sales per employee.";
             document.getElementById("Annotation4").innerHTML = "";
         }
 
@@ -370,8 +375,7 @@
                             .attr("y", yPosition)
                             .attr("text-anchor", "middle")
                             .attr("font-family", "sans-serif")
-                            .attr("font-size", "16px")
-                            .attr("font-weight", "bold")
+                            .attr("font-size", "14px")
                             .attr("stroke", "green")
                             .attr("fill", "green")
                             .text("$"+d.MktCapTrillion+" trillion mkt cap,"+d.CompanyCount+" firms");
@@ -386,7 +390,7 @@
                     .attr("y", function (d) { return y(d[selectedVar]); })
                     .attr("width", x.bandwidth())
                     .attr("height", function (d) { return height - y(d[selectedVar]); })
-                    .attr("fill", "lightgrey")
+                    .attr("fill", "white")
                     .attr("stroke", "black")
  
 
