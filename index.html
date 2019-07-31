@@ -36,6 +36,11 @@
         color: green; font-family: Arial, Helvetica, sans-serif;  font-weight: bold; text-decoration: underline; font-size: 16px;
     }
 
+     [id="Foonotes"] {
+        text-align: left; height: 10px; width: 1100px; background-color: black; 
+        color: grey; font-family: Arial, Helvetica, sans-serif; font-style: italic; font-size: 10px;
+    }
+
 
     svg {
       background-color: black; 
@@ -55,7 +60,7 @@
     background-color: #4CAF50;
     border: none;
     border-radius: 15px;
-    box-shadow: 0 7px #999;
+    box-shadow: 0 5px #999;
     }
 
     button.buttonStyle:hover {background-color: #3e8e41}
@@ -86,10 +91,10 @@
 <body>
 
     <!-- Buttons to drive variable shown in each section -->
-    <button type="button" class="buttonStyle" onclick="update('TotalEEsMillion')">View 1. Total Employees (Million)</button>
-    <button type="button" class="buttonStyle" onclick="update2('RevenueTrillion')">View 2. Total Revenue ($Trillion)</button>
-    <button type="button" class="buttonStyle" onclick="update3('RevPerEEMillion')">View 3. Sales/ Employee ($Million)</button>
-    <button type="button" class="buttonStyle" onclick="update4('MktCapTrillion')">View 4. Market Cap ($Trillion)</button>
+    <button type="button" class="buttonStyle" onclick="update('TotalEEsMillion')">Scene 1. Total Employees (Million)</button>
+    <button type="button" class="buttonStyle" onclick="update2('RevenueTrillion')">Scene 2. Total Revenue ($Trillion)</button>
+    <button type="button" class="buttonStyle" onclick="update3('RevPerEEMillion')">Scene 3. Sales/ Employee ($Million)</button>
+    <button type="button" class="buttonStyle" onclick="update4('MktCapTrillion')">Scene 4. Market Cap ($Trillion)</button>
     <h1>Which Sector of the Fortune 1000 is the Most Valuable?</h1>
 
     <p id="Annotation1"></p>
@@ -98,6 +103,8 @@
     <p id="Annotation4"></p>
 
     <svg></svg>
+
+    <p id="Foonotes">Created by Chris Johnson in July 2019; Based on 2018 data for the 11 largest sectors in the Fortune 1000.</p>
 
     <script>
 
@@ -162,7 +169,7 @@
                     .on("mouseover", function (d) {
                         //Get this bar's x/y values, then augment for the tooltip
                         var xPosition = parseFloat(d3.select(this).attr("x")) + x.bandwidth() / 2;
-                        var yPosition = parseFloat(d3.select(this).attr("y")) -20;
+                        var yPosition = parseFloat(d3.select(this).attr("y")) -25;
                         //Create the tooltip label
                         svg.append("text")
                             .attr("id", "tooltip")
@@ -171,8 +178,8 @@
                             .attr("text-anchor", "middle")
                             .attr("font-family", "sans-serif")
                             .attr("font-size", "14px")
-                            .attr("stroke", "green")
-                            .attr("fill", "green")
+                            .attr("fill", "red")
+                            .attr("font-weight","bold")
                             .text(+d.TotalEEsMillion+"M people,"+d.CompanyCount+" firms");
                     })
                     .on("mouseout", function () {
@@ -193,7 +200,7 @@
             })
 
 
-            document.getElementById("Annotation1").innerHTML = "Retail has 2x more employees than other sector.";
+            document.getElementById("Annotation1").innerHTML = "Retail has 2x more employees than other sector, making it a contender.";
             document.getElementById("Annotation2").innerHTML = "";
             document.getElementById("Annotation3").innerHTML = "";
             document.getElementById("Annotation4").innerHTML = "";
@@ -235,7 +242,7 @@
                     .on("mouseover", function (d) {
                         //Get this bar's x/y values, then augment for the tooltip
                         var xPosition = parseFloat(d3.select(this).attr("x")) + x.bandwidth() / 2;
-                        var yPosition = parseFloat(d3.select(this).attr("y")) -20;
+                        var yPosition = parseFloat(d3.select(this).attr("y")) -25;
                         //Create the tooltip label
                         svg.append("text")
                             .attr("id", "tooltip")
@@ -244,9 +251,8 @@
                             .attr("text-anchor", "middle")
                             .attr("font-family", "sans-serif")
                             .attr("font-size", "14px")
-    
-                            .attr("stroke", "green")
-                            .attr("fill", "green")
+                            .attr("fill", "red")
+                            .attr("font-weight","bold")
                             .text("$"+d.RevenueTrillion+" trillion rev., "+d.CompanyCount+" firms");
                     })
                     .on("mouseout", function () {
@@ -264,7 +270,7 @@
     
 
             })
-            document.getElementById("Annotation2").innerHTML = "Financials generate the most revenue.";
+            document.getElementById("Annotation2").innerHTML = "On the other hand, Financials generate the most revenue.";
             document.getElementById("Annotation3").innerHTML = "";
             document.getElementById("Annotation4").innerHTML = "";
 
@@ -301,7 +307,7 @@
                     .on("mouseover", function (d) {
                         //Get this bar's x/y values, then augment for the tooltip
                         var xPosition = parseFloat(d3.select(this).attr("x")) + x.bandwidth() / 2;
-                        var yPosition = parseFloat(d3.select(this).attr("y")) -20;
+                        var yPosition = parseFloat(d3.select(this).attr("y")) -25;
                         //Create the tooltip label
                         svg.append("text")
                             .attr("id", "tooltip")
@@ -310,9 +316,8 @@
                             .attr("text-anchor", "middle")
                             .attr("font-family", "sans-serif")
                             .attr("font-size", "14px")
-      
-                            .attr("stroke", "green")
-                            .attr("fill", "green")
+                            .attr("fill", "red")
+                            .attr("font-weight","bold")
                             .text("$"+d.RevPerEEMillion+"M per person,"+d.CompanyCount+" firms");
                     })
                     .on("mouseout", function () {
@@ -331,7 +336,7 @@
 
             })
 
-            document.getElementById("Annotation3").innerHTML = "Energy leads in sales per employee.";
+            document.getElementById("Annotation3").innerHTML = "Energy takes the lead in sales per employee.";
             document.getElementById("Annotation4").innerHTML = "";
         }
 
@@ -366,7 +371,7 @@
                     .on("mouseover", function (d) {
                         //Get this bar's x/y values, then augment for the tooltip
                         var xPosition = parseFloat(d3.select(this).attr("x")) + x.bandwidth() / 2;
-                        var yPosition = parseFloat(d3.select(this).attr("y")) -20;
+                        var yPosition = parseFloat(d3.select(this).attr("y")) -25;
                         //Create the tooltip label
                         svg.append("text")
                             .attr("id", "tooltip")
@@ -375,8 +380,8 @@
                             .attr("text-anchor", "middle")
                             .attr("font-family", "sans-serif")
                             .attr("font-size", "14px")
-                            .attr("stroke", "green")
-                            .attr("fill", "green")
+                            .attr("fill", "red")
+                            .attr("font-weight","bold")
                             .text("$"+d.MktCapTrillion+" trillion mkt cap,"+d.CompanyCount+" firms");
                     })
                     .on("mouseout", function () {
@@ -395,7 +400,7 @@
 
             })
 
-            document.getElementById("Annotation4").innerHTML = "However, Tech wins out- its market cap is valued at over $5 trillion USD.";
+            document.getElementById("Annotation4").innerHTML = "Ultimately, Tech wins out- its market cap is valued at over $5 trillion USD.";
         }
 
     </script>
