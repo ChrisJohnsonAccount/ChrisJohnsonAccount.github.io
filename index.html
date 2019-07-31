@@ -140,7 +140,7 @@
         // Function 'update' create & updates chart for new variables
         function update(selectedVar) {
             // Parse the Data
-            d3.csv("https://raw.githubusercontent.com/ChrisJohnsonAccount/CS498FinalProject/master/Fortune1000DataFinal.csv", function (data) {
+            d3.csv("https://raw.githubusercontent.com/ChrisJohnsonAccount/ChrisJohnsonAccount.github.io/master/Fortune1000DataFinal.csv", function (data) {
 
                 // Set X axis, adjust modify axis labels so all Sector names fit
                 x.domain(data.map(function (d) { return d.Sector; }))
